@@ -31,7 +31,7 @@ resource "ibm_is_bare_metal_server" "l1bm_automation_sample_bms" {
     keys         = [ibm_is_ssh_key.sshkey.id]
     primary_network_interface {
         enable_infrastructure_nat = true
-        subnet = {for id, v in data.ibm_is_vpc.selected.subnets : id => v.id if v.zone == "${var.regionlist[var.region]}-${var.zone}" }[0]
+        subnet = {for id, v in data.ibm_is_vpc.selected.subnets : 0 => v.id if v.zone == "${var.regionlist[var.region]}-${var.zone}" }[0]
     interface_type          = "hipersocket"
     name                    = format("%s-bm-nic-1 ", var.prefix)
     security_groups         = [data.ibm_is_vpc.selected.default_security_group]

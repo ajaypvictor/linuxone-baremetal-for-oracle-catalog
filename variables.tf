@@ -28,7 +28,7 @@ variable "region" {
 variable "zone" {
   type        = string
   default     = "1"
-  description = "Zone to deploy to, e.g. 2."
+  description = "Zone to deploy to, e.g. 1."
 
   validation {
     condition     = ( var.zone == "1" ||
