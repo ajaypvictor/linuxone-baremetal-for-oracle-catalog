@@ -4,7 +4,7 @@ variable "regionlist" {
         "London"  = "eu-gb"
         "Sao Paulo" = "br-sao"
         "Toronto" = "ca-tor"
-        "Japan" = "jp-tok"
+        "Tokyo" = "jp-tok"
         "Washington DC" = "us-east"
     }
 }
@@ -19,9 +19,9 @@ variable "region" {
     condition     = ( var.region == "London"  ||
                       var.region == "Sao Paulo" ||
                       var.region == "Toronto" ||
-                      var.region == "Japan" ||
+                      var.region == "Tokyo" ||
                       var.region == "Washington DC" )
-    error_message = "Value of region must be one of London/Sao Paulo/Toronto/Japan/Washington DC."
+    error_message = "Value of region must be one of London/Sao Paulo/Toronto/Tokyo/Washington DC."
   }
 }
 
