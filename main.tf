@@ -12,9 +12,35 @@ terraform {
   zone   = "${var.regionlist[var.region]}-${var.zone}"
 }
 
+data ibm_is_ssh_keys "sshkeydata"{
+
+}
+locals {
+  valssh=[for v in data.ibm_is_ssh_keys.sshkeydata.keys : v.public_key]
+}
+locals {
+  case=contains([for v in local.valssh : v], "${var.ssh-key}") ? 0 : 1
+  sshkeyid = local.case == 0 ? {for id, v in data.ibm_is_ssh_keys.sshkeydata.keys : 0 => v.id if v.public_key == "${var.ssh-key}" }[0]:""
+}
+
+
 resource "ibm_is_ssh_key" "sshkey" {
+  count=local.case
   name       			= "${var.prefix}-ssh"
   public_key 			= "${var.ssh-key}"
+}
+
+
+data  "ibm_is_vpcs" "l1bm_automation_sample_vpc_all" {
+}
+
+locals {
+l1bm_automation_sample_vpc = [for v in data.ibm_is_vpcs.l1bm_automation_sample_vpc_all.vpcs : v.name]
+}
+
+resource "ibm_is_vpc" "l1bm_automation_sample_vpc_new" {
+  count = contains(local.l1bm_automation_sample_vpc, var.logical_network) ? 0 : 1
+  name = var.logical_network
 }
 
 data "ibm_is_vpc" "selected" {
@@ -28,7 +54,7 @@ resource "ibm_is_bare_metal_server" "l1bm_automation_sample_bms" {
     vpc          = data.ibm_is_vpc.selected.id
     zone         = "${var.regionlist[var.region]}-${var.zone}"
     #wait_before_deletion = var.wait_delete
-    keys         = [ibm_is_ssh_key.sshkey.id]
+    keys         = [local.case==0 ? local.sshkeyid : ibm_is_ssh_key.sshkey[0].id]
     primary_network_interface {
         enable_infrastructure_nat = true
         subnet = {for id, v in data.ibm_is_vpc.selected.subnets : 0 => v.id if v.zone == "${var.regionlist[var.region]}-${var.zone}" }[0]

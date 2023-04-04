@@ -12,7 +12,7 @@ variable "regionlist" {
 
 variable "region" {
   type        = string
-  default     = "London"
+  default     = "Sao Paulo"
   description = "Region to deploy to, e.g. London"
 
    validation {
