@@ -28,7 +28,7 @@ variable "region" {
 variable "zone" {
   type        = string
   default     = "1"
-  description = "Zone to deploy to, e.g. 1."
+  description = "Zone to deploy to, e.g. 1. Available zones are 1/2/3."
 
   validation {
     condition     = ( var.zone == "1" ||
@@ -54,7 +54,7 @@ variable "profilelist" {
 variable "profile" {
   type        = string
   default     = "Small"
-  description = "L1BM Profile to be Choosen. Available Profiles: Small/Medium"
+  description = "L1BM Profile to be Chosen. Available Profiles: Small/Medium"
 
    validation {
     condition     = ( var.profile == "Small"  ||
